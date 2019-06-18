@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+  	<div class="main-content">
+     	<div class="error-box">
+            <div class="container">
+               <div class="row justify-content-center">
+                  <div class="col-sm-12">
+                     <div class="error text-center">  
+                        <img class="img-fluid" src="{% static 'images/error-404.png' %}" alt="image">
+                        <p class="mt-2">Result Not Found</p>
+                        {% if errormsg %}
+                          <p class="mt-2">{{ errormsg }}</p>
+                        {% endif %}  
+                        <a href="/" class="button mt-4">Go to Home Page</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+     	</div> 
+  	</div>
+{% endblock content %}
