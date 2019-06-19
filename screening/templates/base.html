@@ -36,8 +36,24 @@
 	<body>
 		{% if request.user.is_authenticated %}
 			<nav class="navbar navbar-dark bg-dark">
-			  <a class="navbar-brand aColor" href="#">Goibibo Test</a>
+			  <a class="navbar-brand aColor" href="{% url 'home' %}">Goibibo Test</a>
 			  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+			  	<ul class="navbar-nav ml-auto">
+		  		 	<li class="nav-item dropdown ptop">
+		  		 		<a class="nav-link aColor mtli" href="{% url 'home' %}" role="button">Search</a>
+		  		 	</li>
+		  		 	<li class="nav-item dropdown ptop">
+		  		 		<a class="nav-link aColor" href="{% url 'jsonParser' %}" role="button">JSON Parser</a>
+		  		 	</li>
+			  	</ul>
+		  	  	<ul class="navbar-nav ml-auto pull-right">
+				    <li class="nav-item dropdown ptop">
+				      <a class="nav-link dropdown-toggle aColor" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{ user.get_username }}</a>
+				      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+				      </div>
+				    </li>
+				  </ul>
 			  </div>
 			</nav>
 		{% endif %}	

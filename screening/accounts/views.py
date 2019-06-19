@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.template import loader
 from django.contrib import auth
 from django.contrib.auth.models import User
@@ -14,18 +15,24 @@ def index(request):
 		}
 		return HttpResponse(template.render(context, request))
 	else:
-		return redirect('/dashboard')	
+		return redirect('/dashboard')
 
+@login_required(login_url='/')
 def logout(request):
 	auth.logout(request)
 	return redirect('/')
+
 
 def registerView(request):
 	template = loader.get_template('accounts/register.html')
 	context = {
 		'title': 'Register',
 	}
-	return HttpResponse(template.render(context, request))
+	try:
+		return HttpResponse(template.render(context, request))
+	except Exception as exception:
+		context['errormsg'] = 'something went wrong please try again'
+		return HttpResponse(template.render(context, request))	
 
 def registerNewUser(request):
 	context = {
@@ -55,7 +62,7 @@ def registerNewUser(request):
 				return HttpResponse(template.render(context, request))	
 		except Exception as exception:
 			template = loader.get_template('404.html')
-			# context['errormsg'] = exception
+			context['errormsg'] = 'something went wrong please try again'
 			return HttpResponse(template.render(context, request))
 	else:
 		return redirect('/')	
@@ -88,7 +95,7 @@ def loginAccount(request):
 				return HttpResponse(template.render(context, request))	
 		except Exception as exception:
 			template = loader.get_template('404.html')
-			context['errormsg'] = exception
+			context['errormsg'] = 'something went wrong please try again'
 			return HttpResponse(template.render(context, request))
 	else:
 		return redirect('/dashboard')

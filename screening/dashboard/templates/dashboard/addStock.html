@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+<div class="main-content">
+ 	<!--================================= Strat Features -->
+	<section class="iq-features">
+		<div class="container">
+		  <div class="panel panel-default">
+		    <div class="panel-heading">  
+          <div class="btn-group pull-right" >
+            <a href="{% url 'home' %}" class="btn btn-primary btn-sm">Back To Search</a>
+          </div> 
+          <h4 style="padding-top: 7.5px;">Add Stock Panel</h4>
+        </div>  
+		    <div class="panel-body">
+		    	<div class="row">
+		    		<div class="col-md-8">
+               <form method="POST" id="post-form" class="post-form">
+                  {% csrf_token %}
+                  {{ form.as_p }}
+                  <br/>
+                 <button type="submit" class="save btn btn-default">Send</button>
+               </form>
+             </div>
+		    	</div>
+		    </div>
+		  </div>
+		</div>
+	</section>
+</div>
+{% endblock content %}

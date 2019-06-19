@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+<script src="{% static 'js/jquery-ui.min.js' %}" type="text/javascript"></script>
+<link href="{% static 'css/codemirror/codemirror.css' %}" rel="stylesheet">
+<link href="{% static 'css/codemirror/ambiance.css' %}" rel="stylesheet">
+<div class="main-content">
+	<section class="iq-features">
+		<div class="container">
+			<div class="panel panel-default">
+				<div class="panel-heading">   
+					<div class="btn-group pull-right" >
+						<a class="btn btn-primary btn-sm" onclick="parseJson();">Click to Parse</a>
+					</div> 
+					<h4 style="padding-top: 7.5px;">JSON Parser</h4>
+				</div>  
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-6">
+								<label for="ac-demo" class="control-label">Add your JSON Here: </label>
+								<textarea id="code1">
+
+								</textarea>
+						</div>
+						<div class="col-md-6">
+								<div class="row">
+									<div class="col-md-12">
+										<label for="ac-demo" class="control-label">Enter JSON Key</label>
+										<input class="form-control" id="searchKey" value="" placeholder="Enter JSON key you want to search" type="text">
+									</div>
+									<div class="col-md-12" id="outputDiv" style="display: none;">
+										<label for="ac-demo" class="control-label">Output</label>
+										<textarea id="code2">
+
+										</textarea>
+									</div>
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+<script src="{% static 'js/codemirror/codemirror.js' %}"></script>
+<script src="{% static 'js/codemirror/mode/javascript/javascript.js' %}"></script>
+
+<script>
+ $(document).ready(function(){
+		 editor_one = CodeMirror.fromTextArea(document.getElementById("code1"), {
+				 lineNumbers: true,
+				 matchBrackets: true,
+				 styleActiveLine: true,
+				 theme:"ambiance"
+		 });
+
+		editor_two = CodeMirror.fromTextArea(document.getElementById("code2"), {
+				 lineNumbers: true,
+				 matchBrackets: true,
+				 styleActiveLine: true,
+				 theme:"ambiance"
+		 });
+	});
+	function parseJson() {
+		if (!$.trim(editor_one.getValue()).length) {
+			setTimeout(function() {
+					toastr.options = {
+							closeButton: true,
+							progressBar: true,
+							showMethod: 'slideDown',
+							timeOut: 4000
+					};
+					toastr.error("Please add JSON Data in First Text Box").css("width","400px");
+			}, 1300);
+		} else if(!$.trim($('#searchKey').val()).length) {
+			setTimeout(function() {
+				toastr.options = {
+						closeButton: true,
+						progressBar: true,
+						showMethod: 'slideDown',
+						timeOut: 4000
+				};
+				toastr.error("Please add Search key").css("width","400px");
+			}, 1300);
+			$('#searchKey').focus();
+		} else {
+			$.ajax({
+				url: '{% url "jsonAction" %}',
+				type: "POST",
+				data: {
+					'csrfmiddlewaretoken' : "{{ csrf_token }}",
+					'dataLoad': editor_one.getValue(),
+					'searchKey' : $('#searchKey').val(),
+				},
+				dataType: 'json',
+				success: function (data) {
+					if (Object.keys(data).length > 0) {
+						if (jQuery.type( data[0]) == 'array' || jQuery.type( data[0]) == 'object') {
+							setTimeout(function() {
+								toastr.options = {
+										closeButton: true,
+										progressBar: true,
+										showMethod: 'slideDown',
+										timeOut: 8000
+								};
+								toastr.error("Please Select correct key from json (Ex:{keyName:value} Here correct key is keyName.) ").css("width","400px");
+							}, 1800);	
+						} else {
+							$("#outputDiv").css("display", "block");
+							editor_two.getDoc().setValue('Total '+Object.keys(data).length+' Record Found For Key ('+ $('#searchKey').val() +') Values => ' + data);
+						}
+					} else {
+						editor_two.getDoc().setValue('Total '+Object.keys(data).length+' Record Found');
+					}
+				}
+			});
+		}
+	}
+</script>
+{% endblock content %}
