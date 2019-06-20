@@ -86,7 +86,7 @@ def jsonParserView(request):
 
 #Parse JSON BY key Value
 @login_required(login_url='/')
-def extract_values(obj, key):
+def extract_values(request, obj, key):
 	"""Pull all values of specified key from nested JSON."""
 	arr = []
 	def extract(obj, arr, key):
@@ -111,7 +111,7 @@ def jsonLoadAndParse(request):
 		arr = []
 		if request.is_ajax() and request.POST['dataLoad'] and request.POST['searchKey']:
 			users = json.loads(request.POST['dataLoad'])
-			names = extract_values(users, request.POST['searchKey'])
+			names = extract_values(request, users, request.POST['searchKey'])
 			data = json.dumps(names)
 			mimetype = 'application/json'
 			return HttpResponse(data, mimetype)
