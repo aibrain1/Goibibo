@@ -1,3 +1,7 @@
+install following packages:
+# pip install django-cache-memoize       
+# pip install objectpath
+
 Run following Command to Chnage DIR to testGoibibo
 
 1. cd path_to_folder (ex:- cd /home/your_Pc_Name/testGoibibo)
