@@ -1,4 +1,4 @@
-# Online Demo <a href="http://jasbir.pythonanywhere.com/dashboard/jsonParser/">Click here</a>
+# Online Demo <a href="http://jasbir.pythonanywhere.com/dashboard/">Click here</a>
 UsreName:- admin@1
 password:- z1a2q3#Z@A!Q
 
